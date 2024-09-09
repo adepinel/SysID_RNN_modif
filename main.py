@@ -19,12 +19,12 @@ torch.manual_seed(1)
 # # # # # # # # Parameters and hyperparameters # # # # # # # #
 params = set_params()
 min_dist, t_end, n_agents, x0, xbar, linear, learning_rate, epochs, Q, \
-alpha_u, alpha_ca, alpha_obst, n_xi, l, n_traj, std_ini, gammabar = params
+alpha_u, alpha_ca, alpha_obst, n_xi, l, n_traj, std_ini, gamma_bar = params
 
 # # # # # # # # Define models # # # # # # # #
 #sys = SystemRobots(xbar, linear)
 sys = TwoRobots(xbar,linear)
-ctl = Controller(sys.f, sys.n, sys.m, n_xi, l, gammabar)
+ctl = Controller(sys.f, sys.n, sys.m, n_xi, l, gamma_bar)
 # # # # # # # # Define optimizer and parameters # # # # # # # #
 optimizer = torch.optim.Adam(ctl.parameters(), lr=learning_rate)
 
@@ -78,7 +78,7 @@ for epoch in range(epochs):
     lossl[epoch] = loss.detach()
     loss.backward(retain_graph=True)
     optimizer.step()
-    ctl.psi_u.set_param(gammabar)
+    ctl.psi_u.set_param(gamma_bar)
 
 t = torch.linspace(0, epochs - 1, epochs)
 plt.figure(figsize=(4 * 2, 4))

@@ -26,9 +26,9 @@ def set_params():
     l = 32  # dimension of the square matrix D11 -- number of _non-linear layers_ of the REN
     n_traj = 1#20  # number of trajectories collected at each step of the learning
     std_ini = 0.2  # standard deviation of initial conditions
-    gammabar = 100
+    gamma_bar = 100
     return min_dist, t_end, n_agents, x0, xbar, linear, learning_rate, epochs, Q, alpha_u, alpha_ca, alpha_obst, n_xi, \
-           l, n_traj, std_ini, gammabar
+           l, n_traj, std_ini, gamma_bar
 
 
 def get_ini_cond(n_agents):
