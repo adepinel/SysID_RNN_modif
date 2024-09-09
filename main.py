@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """
 Train an acyclic REN controller for the system of 2 robots in a corridor or 12 robots swapping positions.
-Author: Danilo Saccani (danilo.saccani@epfl.ch)
+Author: Danilo Saccani (danilo.saccani@epfl.ch), modified from the original code by Clara Galimberti
 """
 
 import torch
 import numpy as np
 
-from src.models import SystemRobots, Controller, TwoRobots
+from src.models import Controller, TwoRobots
 from src.plots import plot_trajectories, plot_traj_vs_time
 from src.loss_functions import f_loss_states, f_loss_u, f_loss_ca, f_loss_obst
 from src.utils import calculate_collisions, set_params
