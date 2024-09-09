@@ -62,7 +62,7 @@ for epoch in range(epochs):
         w_in[0, :] = x0.detach()
         u = torch.zeros(sys.m)
         x = x0
-        xi = torch.zeros(ctl.psi_u.n_xi)
+        xi = torch.zeros(ctl.psi_u.n)
         omega = (x, u)
         for t in range(t_end):
             x, _ = sys(t, x, u, w_in[t, :])
@@ -78,7 +78,7 @@ for epoch in range(epochs):
     lossl[epoch] = loss.detach()
     loss.backward(retain_graph=True)
     optimizer.step()
-    ctl.psi_u.set_model_param()
+    ctl.psi_u.set_param(gammabar)
 
 t = torch.linspace(0, epochs - 1, epochs)
 plt.figure(figsize=(4 * 2, 4))
@@ -95,7 +95,7 @@ w_in = torch.randn(t_end + 1, sys.n)
 w_in[0, :] = x0.detach()
 u = torch.zeros(sys.m)
 x = x0.detach()
-xi = torch.zeros(ctl.psi_u.n_xi)
+xi = torch.zeros(ctl.psi_u.n)
 omega = (x, u)
 for t in range(t_end):
     x, _ = sys(t, x, u, w_in[t, :])
@@ -114,7 +114,7 @@ w_in = torch.randn(t_ext + 1, sys.n)
 w_in[0, :] = x0.detach()
 u = torch.zeros(sys.m)
 x = x0.detach()
-xi = torch.zeros(ctl.psi_u.n_xi)
+xi = torch.zeros(ctl.psi_u.n)
 omega = (x, u)
 for t in range(t_ext):
     x, _ = sys(t, x, u, w_in[t, :])
