@@ -65,12 +65,10 @@ for epoch in range(epochs):
         w_in = torch.randn(t_end + 1, sys.n)
         w_in[0, :] = x0.detach()
         u = torch.zeros(sys.m)
-        x_list = np.zeros(np.size(x0, 0), t_end)
         x = x0
         xi = torch.zeros(ctl.psi_u.n)
         omega = (x, u)
         for t in range(t_end):
-            x_list[:,t]=x.detach()
             x = sys(t, x, u, w_in[t, :])
             u, xi, omega = ctl(t, x, xi, omega)
             loss_x = loss_x + f_loss_states(t, x, sys, Q)
