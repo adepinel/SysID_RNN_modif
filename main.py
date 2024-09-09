@@ -9,7 +9,7 @@ import numpy as np
 
 from src.model_ctrl import Controller
 from src.model_sys import TwoRobots
-from src.plots import plot_trajectories, plot_traj_vs_time
+from src.plots import plot_trajectories, plot_traj_vs_time, plot_losses
 from src.loss_functions import f_loss_states, f_loss_u, f_loss_ca, f_loss_obst
 from src.utils import calculate_collisions, set_params
 import matplotlib.pyplot as plt
@@ -88,13 +88,7 @@ for epoch in range(epochs):
     optimizer.step()
     ctl.psi_u.set_param(gamma_bar)
 
-t = torch.linspace(0, epochs - 1, epochs)
-plt.figure(figsize=(4 * 2, 4))
-plt.subplot(1, 2, 1)
-plt.plot(t, loss_list[:])
-plt.xlabel(r'$epoch$')
-plt.title(r'$loss$')
-plt.show()
+plot_losses(epochs, loss_list, loss_x_list, loss_u_list, loss_ca_list, loss_obst_list)
 # # # # # # # # Save trained model # # # # # # # #
 torch.save(ctl.psi_u.state_dict(), "trained_models/OFFLINE_NeurSLS_tmp.pt")
 # # # # # # # # Print & plot results # # # # # # # #

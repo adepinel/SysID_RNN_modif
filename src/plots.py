@@ -85,3 +85,36 @@ def plot_traj_vs_time(t_end, n_agents, x, u=None, text="", save=False, filename=
         plt.savefig('figures/' + filename + '_' + text + '_x_u.eps', format='eps')
     else:
         plt.show()
+
+def plot_losses(epochs, lossl, lossxl, lossul, losscal, lossobstl, text="", save=False, filename=None):
+    t = torch.linspace(0, epochs - 1, epochs)
+    plt.figure(figsize=(4 * 2, 4))
+    plt.subplot(1, 2, 1)
+    plt.plot(t, lossl[:])
+    plt.xlabel(r'$epoch$')
+    plt.title(r'$loss$')
+    plt.subplot(1, 2, 2)
+    plt.plot(t, lossxl[:])
+    plt.xlabel(r'$epoch$')
+    plt.title(r'$lossx$')
+
+    plt.figure(figsize=(4 * 3, 4))
+    plt.subplot(1, 3, 1)
+    plt.plot(t, lossul[:])
+    plt.xlabel(r'$epoch$')
+    plt.title(r'$lossu$')
+    plt.subplot(1, 3, 2)
+    plt.plot(t, losscal[:])
+    plt.xlabel(r'$epoch$')
+    plt.title(r'$lossoa$')
+    plt.suptitle(text)
+    plt.subplot(1, 3, 3)
+    plt.plot(t, lossobstl[:])
+    plt.suptitle(text)
+    plt.xlabel(r'$t$')
+    plt.title(r'$lossobst$')
+
+    if save:
+        plt.savefig('figures/' + filename + '_' + text + '_x_u.eps', format='eps')
+    else:
+        plt.show()
