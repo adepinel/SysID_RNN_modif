@@ -9,7 +9,6 @@ def calculate_collisions(x, sys, min_dist):
     return n_coll
 
 def set_params():
-
     # # # # # # # # Parameters # # # # # # # #
     min_dist = 1.  # min distance for collision avoidance
     t_end = 5#100
@@ -33,44 +32,10 @@ def set_params():
 
 def get_ini_cond(n_agents):
     # Corridor problem
-    if n_agents == 2:
-        x0 = torch.tensor([2., -2, 0, 0,
-                           -2, -2, 0, 0,
-                           ])
-        xbar = torch.tensor([-2, 2, 0, 0,
-                             2., 2, 0, 0,
-                             ])
-    # Robots problem
-    elif n_agents == 12:
-        x0 = torch.tensor([-3, 5, 0, 0.5,
-                           -3, 3, 0, 0.5,
-                           -3, 1, 0, 0.5,
-                           -3, -1, 0, -0.5,
-                           -3, -3, 0, -0.5,
-                           -3, -5, 0, -0.5,
-                           # second column
-                           3, 5, -0, 0.5,
-                           3, 3, -0, 0.5,
-                           3, 1, -0, 0.5,
-                           3, -1, 0, -0.5,
-                           3, -3, 0, -0.5,
-                           3, -5, 0, -0.5,
-                           ])
-        xbar = torch.tensor([3, -5, 0, 0,
-                             3, -3, 0, 0,
-                             3, -1, 0, 0,
-                             3, 1, 0, 0,
-                             3, 3, 0, 0,
-                             3, 5, 0, 0,
-                             # second column
-                             -3, -5, 0, 0,
-                             -3, -3, 0, 0,
-                             -3, -1, 0, 0,
-                             -3, 1, 0, 0,
-                             -3, 3, 0, 0,
-                             -3, 5.0, 0, 0,
-                             ])
-    else:
-        x0 = torch.randn(4*n_agents)
-        xbar = torch.zeros(4*n_agents)
+    x0 = torch.tensor([2., -2, 0, 0,
+                       -2, -2, 0, 0,
+                       ])
+    xbar = torch.tensor([-2, 2, 0, 0,
+                         2., 2, 0, 0,
+                         ])
     return x0, xbar
