@@ -1,6 +1,6 @@
 import torch
 
-from src.models import SystemRobots, Controller
+from src.model_ctrl import SystemRobots, Controller
 from src.plots import plot_trajectories
 from src.utils import set_params
 

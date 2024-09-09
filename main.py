@@ -7,7 +7,8 @@ Author: Danilo Saccani (danilo.saccani@epfl.ch), modified from the original code
 import torch
 import numpy as np
 
-from src.models import Controller, TwoRobots
+from src.model_ctrl import Controller
+from src.model_sys import TwoRobots
 from src.plots import plot_trajectories, plot_traj_vs_time
 from src.loss_functions import f_loss_states, f_loss_u, f_loss_ca, f_loss_obst
 from src.utils import calculate_collisions, set_params
@@ -34,7 +35,7 @@ w_in[0, :] = (x0)
 u = torch.zeros(sys.m)
 x = x0
 for t in range(t_end):
-    x, y = sys(t, x, u, w_in[t, :])
+    x = sys(t, x, u, w_in[t, :])
     x_log[t, :] = x
     u_log[t, :] = u
 plot_trajectories(x_log, xbar, sys.n_agents, text="CL - before training", T=t_end, obst=alpha_obst)
@@ -53,6 +54,7 @@ loss_x_list = np.zeros(epochs)
 loss_u_list = np.zeros(epochs)
 loss_ca_list = np.zeros(epochs)
 loss_obst_list = np.zeros(epochs)
+
 for epoch in range(epochs):
     optimizer.zero_grad()
     loss_x, loss_u, loss_ca, loss_obst = 0, 0, 0, 0
@@ -63,10 +65,12 @@ for epoch in range(epochs):
         w_in = torch.randn(t_end + 1, sys.n)
         w_in[0, :] = x0.detach()
         u = torch.zeros(sys.m)
+        x_list = np.zeros(np.size(x0, 0), t_end)
         x = x0
         xi = torch.zeros(ctl.psi_u.n)
         omega = (x, u)
         for t in range(t_end):
+            x_list[:,t]=x.detach()
             x = sys(t, x, u, w_in[t, :])
             u, xi, omega = ctl(t, x, xi, omega)
             loss_x = loss_x + f_loss_states(t, x, sys, Q)
@@ -89,9 +93,10 @@ for epoch in range(epochs):
 t = torch.linspace(0, epochs - 1, epochs)
 plt.figure(figsize=(4 * 2, 4))
 plt.subplot(1, 2, 1)
-plt.plot(t, lossl[:])
+plt.plot(t, loss_list[:])
 plt.xlabel(r'$epoch$')
 plt.title(r'$loss$')
+plt.show()
 # # # # # # # # Save trained model # # # # # # # #
 torch.save(ctl.psi_u.state_dict(), "trained_models/OFFLINE_NeurSLS_tmp.pt")
 # # # # # # # # Print & plot results # # # # # # # #
