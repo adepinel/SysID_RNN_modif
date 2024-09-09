@@ -19,12 +19,12 @@ torch.manual_seed(1)
 # # # # # # # # Parameters and hyperparameters # # # # # # # #
 params = set_params()
 min_dist, t_end, n_agents, x0, xbar, linear, learning_rate, epochs, Q, \
-alpha_u, alpha_ca, alpha_obst, n_xi, l, n_traj, std_ini = params
+alpha_u, alpha_ca, alpha_obst, n_xi, l, n_traj, std_ini, gammabar = params
 
 # # # # # # # # Define models # # # # # # # #
 #sys = SystemRobots(xbar, linear)
 sys = TwoRobots(xbar,linear)
-ctl = Controller(sys.f, sys.n, sys.m, n_xi, l)
+ctl = Controller(sys.f, sys.n, sys.m, n_xi, l, gammabar)
 # # # # # # # # Define optimizer and parameters # # # # # # # #
 optimizer = torch.optim.Adam(ctl.parameters(), lr=learning_rate)
 
