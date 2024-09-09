@@ -13,8 +13,6 @@ from src.loss_functions import f_loss_states, f_loss_u, f_loss_ca, f_loss_obst
 from src.utils import calculate_collisions, set_params
 import matplotlib.pyplot as plt
 
-
-
 torch.manual_seed(1)
 # # # # # # # # Parameters and hyperparameters # # # # # # # #
 params = set_params()
@@ -22,7 +20,6 @@ min_dist, t_end, n_agents, x0, xbar, linear, learning_rate, epochs, Q, \
 alpha_u, alpha_ca, alpha_obst, n_xi, l, n_traj, std_ini, gamma_bar = params
 
 # # # # # # # # Define models # # # # # # # #
-#sys = SystemRobots(xbar, linear)
 sys = TwoRobots(xbar,linear)
 ctl = Controller(sys.f, sys.n, sys.m, n_xi, l, gamma_bar)
 # # # # # # # # Define optimizer and parameters # # # # # # # #

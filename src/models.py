@@ -193,12 +193,12 @@ class PsiX(nn.Module):
 
 
 class Controller(nn.Module):
-    def __init__(self, f, n, m, n_xi, l, gammabar):
+    def __init__(self, f, n, m, n_xi, l, gamma_bar):
         super().__init__()
         self.n = n
         self.m = m
         self.psi_x = PsiX(f)
-        self.psi_u = RenG(self.n, self.m, n_xi, l, bias=False, mode="l2stable", gamma=gammabar)
+        self.psi_u = RenG(self.n, self.m, n_xi, l, bias=False, mode="l2stable", gamma=gamma_bar)
 
     def forward(self, t, y_, xi, omega):
         psi_x, _ = self.psi_x(t, omega)
