@@ -47,9 +47,14 @@ print("Problem: RH neurSLS -- t_end: %i" % t_end + " -- lr: %.2e" % learning_rat
 print(" -- alpha_u: %.1f" % alpha_u + " -- alpha_ca: %i" % alpha_ca + " -- alpha_obst: %.1e" % alpha_obst)
 print("REN info -- n_xi: %i" % n_xi + " -- l: %i" % l)
 print("--------- --------- ---------  ---------")
+
+loss_list = np.zeros(epochs)
+loss_x_list = np.zeros(epochs)
+loss_u_list = np.zeros(epochs)
+loss_ca_list = np.zeros(epochs)
+loss_obst_list = np.zeros(epochs)
 for epoch in range(epochs):
     optimizer.zero_grad()
-    lossl = np.zeros(epochs)
     loss_x, loss_u, loss_ca, loss_obst = 0, 0, 0, 0
     if epoch == 300:
         std_ini = 0.5
@@ -62,7 +67,7 @@ for epoch in range(epochs):
         xi = torch.zeros(ctl.psi_u.n)
         omega = (x, u)
         for t in range(t_end):
-            x, _ = sys(t, x, u, w_in[t, :])
+            x = sys(t, x, u, w_in[t, :])
             u, xi, omega = ctl(t, x, xi, omega)
             loss_x = loss_x + f_loss_states(t, x, sys, Q)
             loss_u = loss_u + alpha_u * f_loss_u(t, u)
@@ -72,7 +77,11 @@ for epoch in range(epochs):
     loss = loss_x + loss_u + loss_ca + loss_obst
     print("Epoch: %i --- Loss: %.4f ---||--- Loss x: %.2f --- " % (epoch, loss / t_end, loss_x) +
           "Loss u: %.2f --- Loss ca: %.2f --- Loss obst: %.2f" % (loss_u, loss_ca, loss_obst))
-    lossl[epoch] = loss.detach()
+    loss_list[epoch] = loss.detach()
+    loss_x_list[epoch] = loss_x.detach()
+    loss_u_list[epoch] = loss_u.detach()
+    loss_ca_list[epoch] = loss_ca.detach()
+    loss_obst_list[epoch] = loss_obst.detach()
     loss.backward(retain_graph=True)
     optimizer.step()
     ctl.psi_u.set_param(gamma_bar)
@@ -95,7 +104,7 @@ x = x0.detach()
 xi = torch.zeros(ctl.psi_u.n)
 omega = (x, u)
 for t in range(t_end):
-    x, _ = sys(t, x, u, w_in[t, :])
+    x = sys(t, x, u, w_in[t, :])
     u, xi, omega = ctl(t, x, xi, omega)
     x_log[t, :] = x.detach()
     u_log[t, :] = u.detach()
@@ -114,7 +123,7 @@ x = x0.detach()
 xi = torch.zeros(ctl.psi_u.n)
 omega = (x, u)
 for t in range(t_ext):
-    x, _ = sys(t, x, u, w_in[t, :])
+    x = sys(t, x, u, w_in[t, :])
     u, xi, omega = ctl(t, x, xi, omega)
     x_log[t, :] = x.detach()
     u_log[t, :] = u.detach()

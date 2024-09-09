@@ -178,7 +178,7 @@ class RenG(nn.Module):
                 Q = Q - eps * torch.eye(self.p, device=self.device)
         return Q, R, S
 
-class PsiX(nn.Module):
+class NoiseReconstruction(nn.Module):
     def __init__(self, f):
         super().__init__()
         n = 4
@@ -186,10 +186,9 @@ class PsiX(nn.Module):
         self.f = f
 
     def forward(self, t, omega):
-        y, u = omega
-        psi_x = self.f(t, y, u)
-        omega_ = 0
-        return psi_x, omega_
+        x_old, u_old = omega
+        x_reconstructed = self.f(t, x_old, u_old)
+        return x_reconstructed
 
 
 class Controller(nn.Module):
@@ -197,7 +196,7 @@ class Controller(nn.Module):
         super().__init__()
         self.n = n
         self.m = m
-        self.psi_x = PsiX(f)
+        self.psi_x = NoiseReconstruction(f)
         self.psi_u = RenG(self.n, self.m, n_xi, l, bias=False, mode="l2stable", gamma=gamma_bar)
 
     def forward(self, t, y_, xi, omega):
