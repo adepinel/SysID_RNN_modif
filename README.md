@@ -4,34 +4,13 @@ PyTorch implementation of Neural System Level Synthesis using Recurrent Equilibr
 as presented in "Neural System Level Synthesis: 
 Learning over All Stabilizing Policies for Nonlinear Systems".
 
-## Implementation details
-
-The [implementation details](docs/implementation_details.pdf) can be found in the ```docs``` folder.
-
-## Installation
-
-```bash
-git clone https://github.com/DecodEPFL/neurSLS.git
-
-cd neurSLS
-
-python setup.py install
-```
 
 ## Basic usage
 
 Two environments of robots in the <i>xy</i>-plane are proposed to train the neurSLS controllers.
-Firstly, we propose the problem _mountains_, where two agents need to pass through a narrow corridor 
+We propose the problem _mountains_, where two agents need to pass through a narrow corridor 
 while avoiding collisions.
-Secondly, in the problem _swapping_, 12 robots need to switching positions while avoiding collisions among them.
 
-To train the controllers, run the following script:
-```bash
-./run.py --sys_model [SYS_MODEL]
-```
-where available values for `SYS_MODEL` are `corridor` and `robots`. 
-
-## Examples: 
 
 ### Mountains problem (2 robots)
 
@@ -44,43 +23,6 @@ starting from a random initial position marked with &#9675;, sampled from a Norm
 <img src="./figures/corridorOL.gif" alt="robot_trajectories_before_training" width="400"/>
 <img src="./figures/corridor.gif" alt="robot_trajectories_after_training_a_neurSLS_controller" width="400"/>
 </p> 
-
-### Swapping problem (12 robots)
-
-The following gifs show the trajectories of the 12 robots before and after the training of a neurSLS controller, 
-where the agents swap their initial fixed positions, while avoiding all collisions.
-
-<p align="center">
-<img src="./figures/robotsOL.gif" alt="robot_trajectories_before_training" width="400"/>
-<img src="./figures/robots.gif" alt="robot_trajectories_after_training_a_neurSLS_controller" width="400"/>
-</p> 
-
-### Early stopping of the training
-We verify that neurSLS controllers ensure closed-loop stability by design even during exploration. 
-Results are reported in the following gifs, where we train the neurSLS controller 
-for 0\%, 25\%, 50\% and 75\% of the total number of iterations.
-
-**Mountains problem**: <br>
-Note that, for this example, we fix the initial condition to be [&#177;2 , -2] and 
-we train for 150 epochs.
-<p align="center">
-<img src="./figures/corridor0.gif" alt="mountains_0_training" width="200"/>
-<img src="./figures/corridor25.gif" alt="mountains_25_training" width="200"/>
-<img src="./figures/corridor50.gif" alt="mountains_50_training" width="200"/>
-<img src="./figures/corridor75.gif" alt="mountains_75_training" width="200"/>
-</p> 
-
-**Swapping problem**:
-<p align="center">
-<img src="./figures/robots0.gif" alt="robot_trajectories_0_training" width="200"/>
-<img src="./figures/robots25.gif" alt="robot_trajectories_25_training" width="200"/>
-<img src="./figures/robots50.gif" alt="robot_trajectories_50_training" width="200"/>
-<img src="./figures/robots75.gif" alt="robot_trajectories_75_training" width="200"/>
-</p>
-
-In both cases, the training is performed for _t_ &in; [0,5].  
-Partially trained distributed controllers exhibit suboptimal behavior, but never 
-compromise closed-loop stability.
 
 <!-- 
 ## Implementation details
@@ -172,23 +114,6 @@ We set &sigma; = 0.2 for the first 300 epochs and then increased it to &sigma; =
 At each epoch we simulate five trajectories over which we calculate the corresponding loss.
 The learning rate is set to 0.001.
 
-
-### Swapping problem (12 robots)
-
-The system consists of 12 robots of radius 0.25<i>m</i> and mass m = 1<i>kg</i>. 
-The drag function is given by C(q)q = bq, with b = 1<i>N·s/m</i>. 
-For the based controller _K'_, we set _k<sub>1</sub>_, _k<sub>2</sub>_ = 1<i>N/m</i>.
-
-The REN is a deep neural network with depth _r_ = 24 layers (_v_ &in; &reals;<sup>r</sup> ).
-Its internal state &xi; is of dimension _q_ = 96.
-
-We train Neur-SLS control policies to optimize the performance over a horizon of _5_ seconds 
-with sampling time T<sub>s</sub>=0.05 seconds, resulting in _T_ = 100 time-steps.
-We use gradient descent with Adam for 1500 epochs in order to minimize the loss function with 
-hyperparameters Q = diag(1,1,1,1), a<sub>u</sub> = 0.1 and a<sub>ca</sub> = 1000. 
-Since there are no fixed obstacles in the environment, we set a<sub>obst</sub> = 0.
-The learning rate is set to 0.002 for the entire training.
- -->
 
 ## License
 This work is licensed under a
