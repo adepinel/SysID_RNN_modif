@@ -20,9 +20,12 @@ params = set_params()
 min_dist, t_end, n_agents, x0, xbar, linear, learning_rate, epochs, Q, \
 alpha_u, alpha_ca, alpha_obst, n_xi, l, n_traj, std_ini, gamma_bar = params
 
+#######################
+use_OL_signal = True
+
 # # # # # # # # Define models # # # # # # # #
 sys = TwoRobots(xbar,linear)
-ctl = Controller(sys.f, sys.n, sys.m, n_xi, l, gamma_bar)
+ctl = Controller(sys.f, sys.n, sys.m, n_xi, l, gamma_bar, use_OL_signal, t_end)
 # # # # # # # # Define optimizer and parameters # # # # # # # #
 optimizer = torch.optim.Adam(ctl.parameters(), lr=learning_rate)
 
@@ -66,7 +69,7 @@ for epoch in range(epochs):
         w_in[0, :] = x0.detach()
         u = torch.zeros(sys.m)
         x = x0
-        xi = torch.zeros(ctl.psi_u.n)
+        xi = torch.zeros(ctl.ren_l2.n)
         omega = (x, u)
         for t in range(t_end):
             x = sys(t, x, u, w_in[t, :])
@@ -86,11 +89,11 @@ for epoch in range(epochs):
     loss_obst_list[epoch] = loss_obst.detach()
     loss.backward(retain_graph=True)
     optimizer.step()
-    ctl.psi_u.set_param(gamma_bar)
+    ctl.ren_l2.set_param(gamma_bar)
 
 plot_losses(epochs, loss_list, loss_x_list, loss_u_list, loss_ca_list, loss_obst_list)
 # # # # # # # # Save trained model # # # # # # # #
-torch.save(ctl.psi_u.state_dict(), "trained_models/OFFLINE_NeurSLS_tmp.pt")
+torch.save(ctl.ren_l2.state_dict(), "trained_models/OFFLINE_NeurSLS_tmp.pt")
 # # # # # # # # Print & plot results # # # # # # # #
 x_log = torch.zeros(t_end, sys.n)
 u_log = torch.zeros(t_end, sys.m)
@@ -98,7 +101,7 @@ w_in = torch.randn(t_end + 1, sys.n)
 w_in[0, :] = x0.detach()
 u = torch.zeros(sys.m)
 x = x0.detach()
-xi = torch.zeros(ctl.psi_u.n)
+xi = torch.zeros(ctl.ren_l2.n)
 omega = (x, u)
 for t in range(t_end):
     x = sys(t, x, u, w_in[t, :])
@@ -117,7 +120,7 @@ w_in = torch.randn(t_ext + 1, sys.n)
 w_in[0, :] = x0.detach()
 u = torch.zeros(sys.m)
 x = x0.detach()
-xi = torch.zeros(ctl.psi_u.n)
+xi = torch.zeros(ctl.ren_l2.n)
 omega = (x, u)
 for t in range(t_ext):
     x = sys(t, x, u, w_in[t, :])

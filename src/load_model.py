@@ -16,9 +16,9 @@ def load(sys_model, shocks=False):
     sys = SystemRobots(xbar, linear)
     ctl = Controller(sys.f, sys.n, sys.m, n_xi, l)
     # # # # # # # # Define optimizer and parameters # # # # # # # #
-    ctl.psi_u.load_state_dict(torch.load("trained_models/" + sys_model + ".pt"))
-    ctl.psi_u.eval()
-    ctl.psi_u.set_model_param()
+    ctl.ren_l2.load_state_dict(torch.load("trained_models/" + sys_model + ".pt"))
+    ctl.ren_l2.eval()
+    ctl.ren_l2.set_model_param()
     # # # # # # # # Shocks # # # # # # # #
     if sys_model == "corridor" and shocks:
         # Trajectories
@@ -28,7 +28,7 @@ def load(sys_model, shocks=False):
         w_in[0, :] = (x0.detach() - sys.xbar)
         u = torch.zeros(sys.m)
         x = sys.xbar
-        xi = torch.zeros(ctl.psi_u.n_xi)
+        xi = torch.zeros(ctl.ren_l2.n_xi)
         omega = (x, u)
         for t in range(t_end):
             x, _ = sys(t, x, u, w_in[t, :])
@@ -50,7 +50,7 @@ def load(sys_model, shocks=False):
             w_in[t_s[i], :] = torch.cat([x_shock1, x_shock2])
         u = torch.zeros(sys.m)
         x = sys.xbar
-        xi = torch.zeros(ctl.psi_u.n_xi)
+        xi = torch.zeros(ctl.ren_l2.n_xi)
         omega = (x, u)
         for t in range(t_end):
             x, _ = sys(t, x, u, w_in[t, :])

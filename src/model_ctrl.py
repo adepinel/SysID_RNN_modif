@@ -179,6 +179,23 @@ class RenG(nn.Module):
         return Q, R, S
 
 
+class InputOL(torch.nn.Module):
+    def __init__(self, m, t_end, active=True, device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')):
+        super().__init__()
+        self.t_end = t_end
+        self.m = m
+        if active:
+            std = 0
+            self.u = torch.nn.Parameter(torch.randn(t_end, m, requires_grad=True, device=device) * std)
+        else:
+            self.u = torch.zeros(t_end, m, device=device)
+
+    def forward(self, t, device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')):
+        if t < self.t_end:
+            return self.u[t, :]
+        else:
+            return torch.zeros(self.m, device=device)
+
 class NoiseReconstruction(nn.Module):
     def __init__(self, f):
         super().__init__()
@@ -193,17 +210,22 @@ class NoiseReconstruction(nn.Module):
 
 
 class Controller(nn.Module):
-    def __init__(self, f, n, m, n_xi, l, gamma_bar):
+    def __init__(self, f, n, m, n_xi, l, gamma_bar, use_sp=False, t_end_sp=None, device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')):
         super().__init__()
         self.n = n
         self.m = m
-        self.psi_x = NoiseReconstruction(f)
-        self.psi_u = RenG(self.n, self.m, n_xi, l, bias=False, mode="l2stable", gamma=gamma_bar)
+        self.reconstruct_noise = NoiseReconstruction(f)
+        self.ren_l2 = RenG(self.n, self.m, n_xi, l, bias=False, mode="l2stable", gamma=gamma_bar)
+        self.use_sp = use_sp
+        if use_sp:  # setpoint that enters additively in the reconstruction of omega
+            self.sp = InputOL(n, t_end_sp, active=use_sp)
 
-    def forward(self, t, y_, xi, omega):
-        psi_x = self.psi_x(t, omega)
-        w_ = y_ - psi_x
-        u_, xi_ = self.psi_u(t, w_, xi)
-        omega_ = (y_, u_)
+    def forward(self, t, x_, xi, omega):
+        psi_x = self.reconstruct_noise(t, omega)
+        w_ = x_ - psi_x
+        if self.use_sp:
+            w_ = w_ + self.sp(t)
+        u_, xi_ = self.ren_l2(t, w_, xi)
+        omega_ = (x_, u_)
         return u_, xi_, omega_
 
