@@ -24,7 +24,7 @@ starting from a random initial position marked with &#9675;, sampled from a Norm
 <img src="./figures/corridor.gif" alt="robot_trajectories_after_training_a_neurSLS_controller" width="400"/>
 </p> 
 
-<!-- 
+
 ## Implementation details
 
 We consider a fleet of mobile robots that need to asymptotically achieve a pre-specified formation 
