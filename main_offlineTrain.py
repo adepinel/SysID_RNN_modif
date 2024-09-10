@@ -14,7 +14,7 @@ from src.plots import plot_trajectories, plot_traj_vs_time, plot_losses
 from src.loss_functions import f_loss_states, f_loss_u, f_loss_ca, f_loss_obst
 from src.utils import calculate_collisions, set_params
 
-# Set the random seed for reproducibility
+# Set the random seed for reproducibility a
 torch.manual_seed(1)
 # Set the parameters and hyperparameters for the simulation
 params = set_params()
