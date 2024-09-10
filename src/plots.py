@@ -54,6 +54,17 @@ def plot_trajectories(x, xbar, n_agents, text="", save=False, filename=None, T=1
     return fig
 
 
+
+#########
+# This function plots the trajectories of agents' positions and velocities over time. It takes in the following arguments:
+#t_end: the end time of the simulation
+#n_agents: the number of agents in the simulation
+#x: a tensor of shape (t_end, 4*n_agents) containing the positions and velocities of all agents over time
+#u: an optional tensor of shape (t_end, 2*n_agents) containing the control inputs for all agents over time
+#text: an optional string to add as a title to the plot
+#save: a boolean indicating whether to save the plot as a file or display it
+#filename: an optional string to use as the filename if save is True
+#The function first creates a time tensor t and determines the number of subplots to create based on whether u is provided. It then creates a figure with the appropriate number of subplots and plots the positions and velocities of all agents over time in the first two subplots. If u is provided, it plots the control inputs for all agents over time in the third subplot. Finally, it adds a title to the entire figure and saves it as a file if save is True, or displays it if save is False.
 def plot_traj_vs_time(t_end, n_agents, x, u=None, text="", save=False, filename=None):
     t = torch.linspace(0,t_end-1, t_end)
     if u is not None:
@@ -118,3 +129,5 @@ def plot_losses(epochs, lossl, lossxl, lossul, losscal, lossobstl, text="", save
         plt.savefig('figures/' + filename + '_' + text + '_x_u.eps', format='eps')
     else:
         plt.show()
+
+
