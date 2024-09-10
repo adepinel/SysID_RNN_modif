@@ -80,6 +80,8 @@ for epoch in range(epochs):
     for kk in range(n_traj):
         u = torch.zeros(sys.m)
         x = x0
+        w_in = torch.randn((t_ext + 1, sys.n))
+        w_in[0, :] = x0
         xi = torch.zeros(ctl.ren_l2.n)
         omega = (x, u)
         for t in range(t_end):
