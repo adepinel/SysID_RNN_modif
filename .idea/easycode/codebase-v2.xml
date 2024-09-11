@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/src/__init__.py;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/src/load_model.py;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/src/loss_functions.py;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/src/model_ctrl.py;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/src/model_sys.py;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/src/plots.py;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/src/utils.py;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/LICENSE.md;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/main.py;/Users/danilo/Library/CloudStorage/OneDrive-epfl.ch/Drive/EPFL/Progetti attivi/Base_neurSLS/README.md" />
+  </component>
+</project>
