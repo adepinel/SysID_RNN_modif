@@ -2,19 +2,12 @@
 
 This code implements a single RNN model for system identification of a 3-tank system. The model is trained on input-output data and is used to predict the output of the system for validation data.
 
-## **Requirements**
-
-- Python 3.x
-- PyTorch
-- NumPy
-- SciPy
-- Matplotlib
 
 ## **Usage**
 
 1. Clone the repository to your local machine.
 2. Navigate to the `src` directory.
-3. Run the `single_rnn_sysid.py` file using the command `python single_rnn_sysid.py`.
+3. Run the `main.py` file using the command `python main.py`.
 
 ## **Inputs**
 
