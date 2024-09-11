@@ -1,132 +1,53 @@
-# Neural System Level Synthesis
+# **Single RNN Model for System Identification**
 
-PyTorch implementation of Neural System Level Synthesis using Recurrent Equilibrium Networks, 
-as presented in "Neural System Level Synthesis: 
-Learning over All Stabilizing Policies for Nonlinear Systems".
+This code implements a single RNN model for system identification of a 3-tank system. The model is trained on input-output data and is used to predict the output of the system for validation data.
 
+## **Requirements**
 
-## Basic usage
+- Python 3.x
+- PyTorch
+- NumPy
+- SciPy
+- Matplotlib
 
-Two environments of robots in the <i>xy</i>-plane are proposed to train the neurSLS controllers.
-We propose the problem _mountains_, where two agents need to pass through a narrow corridor 
-while avoiding collisions.
+## **Usage**
 
+1. Clone the repository to your local machine.
+2. Navigate to the `src` directory.
+3. Run the `single_rnn_sysid.py` file using the command `python single_rnn_sysid.py`.
 
-### Mountains problem (2 robots)
+## **Inputs**
 
-The following gifs show trajectories of the 2 robots before and after the training of a neurSLS controller, 
-where the agents that need to coordinate in order to pass through a narrow passage, 
-starting from a random initial position marked with &#9675;, sampled from a Normal distribution centered in 
-[&#177;2 , -2] with standard deviation of 0.5.
+The code reads input-output data from a MATLAB file `dataset_sysID_3tanks_final.mat`. The file contains the following variables:
 
-<p align="center">
-<img src="./figures/corridorOL.gif" alt="robot_trajectories_before_training" width="400"/>
-<img src="./figures/corridor.gif" alt="robot_trajectories_after_training_a_neurSLS_controller" width="400"/>
-</p> 
+- `dExp`: Input data for training.
+- `yExp`: Output data for training.
+- `dExp_val`: Input data for validation.
+- `yExp_val`: Output data for validation.
+- `Ts`: Sampling time.
 
+## **Outputs**
 
-## Implementation details
+The code outputs the following:
 
-We consider a fleet of mobile robots that need to asymptotically achieve a pre-specified formation 
-described by (p&#x0304;<sub>x</sub> , p&#x0304;<sub>y</sub>) for each agent _i_. The requirements are:
+- Plots of the loss over epochs, and the predicted output for each tank for the training and validation data.
+- A MATLAB file `data_singleRNN.mat` containing the predicted output for the validation data.
 
-R1) The control policy asymptotically steers the agents to the target position (closed-loop stability)
+## **Code Structure**
 
-R2) A cost function is minimized over a finite horizon of 5 seconds
+The code is structured as follows:
 
+1. Import necessary libraries.
+2. Load data from file.
+3. Initialize input and output tensors.
+4. Initialize RNN model.
+5. Define loss function and optimization method.
+6. Train the RNN model.
+7. Get RNN output for validation data.
+8. Calculate loss for validation data.
+9. Plot loss over epochs and predicted output for each tank for training and validation data.
+10. Save predicted output and validation data to file.
 
+## **License**
 
-Each robot _i_ is modeled as a point-mass vehicle with position 
-_p<sub>t</sub>_ &in;&reals;<sup>2</sup> and velocity 
-_q<sub>t</sub>_ &in;&reals;<sup>2</sup> subject to nonlinear drag forces 
-(e.g., air or water resistance). 
-The discrete-time model for each vehicle of mass _m_ is 
-
-p<sub>t</sub> = p<sub>t-1</sub> + T<sub>s</sub> q<sub>t-1</sub>
-
-q<sub>t</sub> = q<sub>t-1</sub> - T<sub>s</sub> 1/m C(q<sub>t-1</sub>) q<sub>t-1</sub> + u<sub>t-1</sub>
-
-where _u<sub>t</sub>_ denotes the force control input, _T<sub>s</sub>_ > 0 is the sampling time
-and C(·) is a positive <i>drag function</i>.
-We consider a  base controller 
-
-u<sub>t</sub> = K'(p&#x0304;-p<sub>t</sub>) 
-
-with _K'_ = diag(_k_,_k_) and _k_ > 0,
-
-which is _strongly stabilizing_. 
-
-
-Given a set of _N_ vehicles, we denote the overall state as X = (x<sup>1</sup>, ..., x<sup>N</sup>) 
-and control input U = (u<sup>1</sup>, ..., u<sup>N</sup>) as the stacked state and input vectors 
-of each agent, respectively. Then, the cost function to minimize is given by
-
-L = &sum; (L<sub>x</sub>(t) + a<sub>u</sub> L<sub>u</sub>(t) + 
-a<sub>ca</sub> L<sub>ca</sub>(t) + a<sub>obst</sub> L<sub>obst</sub>(t) 
-
-where the sum is done over t = 0, 1, ..., T, 
-and a<sub>u</sub>, a<sub>ca</sub>, a<sub>obst</sub> > 0 are hyperparameters to be set.
-
-
-The first two addends represent the cost of the state and input signals respectively and are given by: 
-
-L<sub>x</sub>(t) = X<sup>&top;</sup>(t) Q X(t), &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp;
-L<sub>u</sub>(t) = U<sup>&top;</sup>(t) U(t).
-
-where _Q_ is a predefined weighted matrix.
-
-
-The third addend strongly penalizes the event that any two robots _i_ and _j_ find themselves 
-at a distance _d_<sub>ij</sub>(t) < _D_, where _D_ &in;&reals;<sup>+</sup> is a pre-defined safety distance.
-It is given by
-
-L<sub>ca</sub>(t) = &sum;<sub>i,j, i&ne;j</sub> (d<sub>ij</sub>(t) + &epsilon;)<sup>-2</sup> 
-if d<sub>ij</sub>(t) &le; D, and L<sub>ca</sub>(t) = 0 otherwise,
-
-where &epsilon; > 0 is a small constant such that L<sub>ca</sub>(t) < &infin;.
-
-
-The last addend penalizes the _xy_ position of each robot according to a predefined map with obstacles.
-For the corridor case, we modelled each obstacle as a Gaussian centered at (&pm;1.5, 0) and (&pm;2.5, 0)
-with covariance diag(0.2, 0.2).
-
-
-### Mountains problem (2 robots)
-
-The system consists of 2 robots of radius 0.5<i>m</i> and mass m = 1<i>kg</i>. 
-The drag function is given by 
-
-C(q)q = b<sub>1</sub> q + b<sub>2</sub> |q| q, 
-
-with b<sub>1</sub> = 1<i>N·s/m</i> and b<sub>2</sub> = 0.1<i>N·s/m</i>. 
-For the based controller _K'_, _k<sub>1</sub>_, _k<sub>2</sub>_ = 1<i>N/m</i>.
-
-The REN is a deep neural network with depth _r_ = 32 layers (_v_ &in; &reals;<sup>r</sup> ).
-Its internal state &xi; is of dimension _q_ = 32.
-
-We train Neur-SLS control policies to optimize the performance over a horizon of _5_ seconds 
-with sampling time T<sub>s</sub>=0.05 seconds, resulting in _T_ = 100 time-steps.
-We use gradient descent with Adam for 500 epochs in order to minimize the loss function with 
-hyperparameters Q = diag(1,1,1,1), a<sub>u</sub> = 0.1, a<sub>ca</sub> = 100 and a<sub>obst</sub> = 5000.
-The initial positions of the robots are sampled from a Normal distribution centered at (&pm;2, -2), with
-covariance diag(&sigma;<sup>2</sup>, &sigma;<sup>2</sup>).
-We set &sigma; = 0.2 for the first 300 epochs and then increased it to &sigma; = 0.5.
-At each epoch we simulate five trajectories over which we calculate the corresponding loss.
-The learning rate is set to 0.001.
-
-
-## License
-This work is licensed under a
-[Creative Commons Attribution 4.0 International License][cc-by].
-
-[![CC BY 4.0][cc-by-image]][cc-by] 
-
-[cc-by]: http://creativecommons.org/licenses/by/4.0/
-[cc-by-image]: https://i.creativecommons.org/l/by/4.0/88x31.png
-[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
-
-
-## References
-[[1]](https://arxiv.org/pdf/2203.11812.pdf) Luca Furieri, Clara Galimberti, Giancarlo Ferrari-Trecate.
-"Neural System Level Synthesis: Learning over All Stabilizing Policies for Nonlinear Systems,"
-arXiv:2203.11812, 2022.
+This code is licensed under the MIT License.
