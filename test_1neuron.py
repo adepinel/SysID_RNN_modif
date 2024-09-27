@@ -71,10 +71,10 @@ optimizer = torch.optim.Adam(RNN.parameters(), lr=learning_rate)
 optimizer.zero_grad()
 
 # Set end time for training data
-t_end = yExp[0, 0].shape[0]
+#t_end = yExp[0, 0].shape[0]
 
 # Set number of epochs
-epochs = 1
+epochs = 10
 
 # Initialize array to store loss values
 LOSS = np.zeros(epochs)
@@ -107,7 +107,7 @@ for epoch in range(epochs):
     LOSS[epoch] = loss
 
 # Set end time for validation data
-t_end = yExp_val[0, 0].shape[0]
+#t_end = yExp_val[0, 0].shape[0]
 
 # Initialize input and output tensors for validation data
 nExp = yExp_val.size
@@ -143,7 +143,7 @@ plt.show()
 
 # Plot output 1 for validation data
 plt.figure('10')
-plt.plot(yRNN_val[:, 0].detach().numpy(), label='RNN val')
+plt.plot(yRNN_val[0, :, 0].detach().numpy(), label='RNN val')
 plt.plot(yval[0, :, 0].detach().numpy(), label='y val')
 plt.title("output 1 val single RNN")
 plt.legend()

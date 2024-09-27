@@ -44,8 +44,8 @@ inputnumberD = 4
 
 # Fill input and output tensors with data
 for j in range(nExp):
-    inputActive = (torch.from_numpy(dExp[0, j]))
-    u[j, :, :] = torch.unsqueeze(inputActive[:,inputnumberD], 1)
+    #inputActive = (torch.from_numpy(dExp[0, j]))
+    u[j, :, :] = (torch.from_numpy(dExp[0, j]))
     y[j, :, :] = (torch.from_numpy(yExp[0, j]))
 
 # Set random seed for reproducibility
@@ -73,7 +73,7 @@ optimizer.zero_grad()
 #t_end = yExp[0, 0].shape[0]
 
 # Set number of epochs
-epochs = 300
+epochs = 50
 
 # Initialize array to store loss values
 LOSS = np.zeros(epochs)
