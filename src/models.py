@@ -75,10 +75,10 @@ class LSTModel(nn.Module):
 class RENR(nn.Module):
     def __init__(self, n, m, n_xi, l):
         super().__init__()
-        self.n = n  # nel paper m
-        self.n_xi = n_xi  # nel paper n1
-        self.l = l  # nel paper q
-        self.m = m  # nel paper p1
+        self.n = n  # nel paper m input
+        self.n_xi = n_xi  # nel paper n1 w hdd 
+        self.l = l  # nel paper q x
+        self.m = m  # nel paper p1 output
         self.s = np.max((n, m))  # s nel paper, dimensione di X3 Y3
 
         # # # # # # # # # Training parameters # # # # # # # # #
