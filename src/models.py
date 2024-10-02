@@ -57,7 +57,7 @@ class LSTModel(nn.Module):
         self.layer_dim = layer_dim
 
         # RNN
-        self.lstm = nn.LSTM(input_dim, hidden_dim, layer_dim, batch_first=True)
+        self.lstm = nn.LSTM(input_dim, hidden_dim, layer_dim, batch_first=True,bias=True)
 
         # Readout layer
         self.fc = nn.Linear(hidden_dim, output_dim)

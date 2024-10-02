@@ -54,8 +54,8 @@ torch.manual_seed(seed)
 
 # Set dimensions for RNN layers
 idd = dExp[0, 0].shape[1]
-hdd = 10
-ldd = 2
+hdd = 5
+ldd = 1
 odd = yExp[0, 0].shape[1]
 
 # Initialize RNN model
@@ -73,7 +73,7 @@ optimizer.zero_grad()
 #t_end = yExp[0, 0].shape[0]
 
 # Set number of epochs
-epochs = 80
+epochs = 100
 
 # Initialize array to store loss values
 LOSS = np.zeros(epochs)
@@ -99,7 +99,6 @@ for epoch in range(epochs):
     loss = MSE(yRNN, y)
     loss.backward()
     optimizer.step()
-    
 
     # Print loss for current epoch
     print(f"Epoch: {epoch + 1} \t||\t Loss: {loss}")
@@ -160,7 +159,7 @@ plt.show()
 plt.figure('12')
 plt.plot(yRNN_val[0, :, 1].detach().numpy(), label='RNN val')
 plt.plot(yval[0, :, 1].detach().numpy(), label='y val')
-plt.title("output 2 val single RNN")
+plt.title("output 2 val single REN")
 plt.legend()
 plt.show()
 
