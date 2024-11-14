@@ -17,8 +17,8 @@ from torch.autograd import Variable
 
 
 dtype = torch.float
-device = torch.device("cpu")
-
+#device = torch.device("cpu")
+device = "cuda" #if torch.cuda.is_available() else "cpu"
 
 class RNNModel(nn.Module):
     def __init__(self, input_dim, hidden_dim, layer_dim, output_dim):
@@ -31,7 +31,7 @@ class RNNModel(nn.Module):
         self.layer_dim = layer_dim
 
         # RNN
-        self.rnn = nn.RNN(input_dim, hidden_dim, layer_dim, nonlinearity='relu', batch_first=True)
+        self.rnn = nn.RNN(input_dim, hidden_dim, layer_dim, nonlinearity='tanh', batch_first=True, bias=True)
 
         # Readout layer
         self.fc = nn.Linear(hidden_dim, output_dim)
@@ -68,9 +68,97 @@ class LSTModel(nn.Module):
         out = self.fc(out)
         # out = out.squeeze()
         return out
+"""
+# chatgpt correction...
+# REN WITH TRAINABLE GAMMA
+class RENR(nn.Module):
+    def __init__(self, n, m, n_xi, l):
+        super().__init__()
+        self.n = n  # nel paper m input
+        self.n_xi = n_xi  # nel paper n1 w hdd
+        self.l = l  # nel paper q x
+        self.m = m  # nel paper p1 output
+        self.s = np.max((n, m))  # s nel paper, dimensione di X3 Y3
+
+        # # # # # # # # # Training parameters # # # # # # # # #
+        std = 1
+        self.X = nn.Parameter(torch.randn(2 * n_xi + l, 2 * n_xi + l) * std)
+        self.Y = nn.Parameter(torch.randn(n_xi, n_xi) * std)
+        self.B2 = nn.Parameter(torch.randn(n_xi, n) * std)
+        self.C2 = nn.Parameter(torch.randn(m, n_xi) * std).to(device)
+        self.D21 = nn.Parameter(torch.randn(m, l) * std).to(device)
+        self.X3 = nn.Parameter(torch.randn(self.s, self.s) * std)
+        self.Y3 = nn.Parameter(torch.randn(self.s, self.s) * std)
+        self.sg = nn.Parameter(torch.randn(1, 1) * std)
+
+        # v signal
+        self.D12 = nn.Parameter(torch.randn(l, n) * std)
+        self.epsilon = 0.001
+        self.set_model_param()  # Initialize auxiliary parameters
+
+    def set_model_param(self):
+        n_xi, l, n, m = self.n_xi, self.l, self.n, self.m
+        gamma = self.sg ** 2
+
+        # Auxiliary calculations
+        R = gamma * torch.eye(n, n)
+        Q = (-1 / gamma) * torch.eye(m, m)
+        M = F.linear(self.X3, self.X3) + self.Y3 - self.Y3.T + self.epsilon * torch.eye(self.s)
+        M_tilde = F.linear(torch.eye(self.s) - M.clone(), torch.inverse(torch.eye(self.s) + M.clone()).T)
+        Zeta = M_tilde[:self.m, :self.n]
+        
+        # Cloning tensors to avoid inplace modification issues
+        self.D22 = (gamma * Zeta).clone()
+        R_capital = (R - (1 / gamma) * F.linear(self.D22.T, self.D22.T)).clone()
+        C2_capital = (torch.matmul(torch.matmul(self.D22.T, Q), self.C2)).clone()
+        D21_capital = (torch.matmul(torch.matmul(self.D22.T, Q), self.D21) - self.D12.T).clone()
+
+        vec_R = torch.cat([C2_capital.T, D21_capital.T, self.B2], 0).clone()
+        vec_Q = torch.cat([self.C2.T, self.D21.T, torch.zeros(n_xi, m)], 0).clone()
+
+        H = (torch.matmul(self.X.T, self.X) + self.epsilon * torch.eye(2 * n_xi + l) +
+             torch.matmul(torch.matmul(vec_R, torch.inverse(R_capital)), vec_R.T) -
+             torch.matmul(torch.matmul(vec_Q, Q), vec_Q.T)).clone()
+
+        # Split H and clone to avoid inplace modification errors
+        h1, h2, h3 = torch.split(H, (n_xi, l, n_xi), dim=0)
+        H11, H12, H13 = torch.split(h1, (n_xi, l, n_xi), dim=1)
+        H21, H22, _ = torch.split(h2, (n_xi, l, n_xi), dim=1)
+        H31, H32, H33 = torch.split(h3, (n_xi, l, n_xi), dim=1)
+
+        # Set parameters while ensuring they aren't modified in-place
+        self.F = H31.clone()
+        self.B1 = H32.clone()
+        self.E = 0.5 * (H11.clone() + H33.clone() + self.Y - self.Y.T)
+        self.Lambda = torch.diag(H22.clone())
+        self.D11 = -torch.tril(H22.clone(), diagonal=-1)
+        self.C1 = -H21.clone()
+
+    def forward(self, t, w, xi):
+        assert xi.device == device, f"xi is on {xi.device}, expected {device}"
+        assert w.device == device, f"w is on {w.device}, expected {device}"
+        print(f"xi: {xi.device}, w: {w.device}")
+        vec = torch.zeros(self.l, device=xi.device)
+        vec[0] = 1
+        epsilon = torch.zeros(self.l, device=xi.device)
+
+        v = F.linear(xi, self.C1[0, :]) + F.linear(w, self.D12[0, :])
+        epsilon = epsilon + vec * torch.tanh(v / self.Lambda[0])
+        
+        for i in range(1, self.l):
+            vec = torch.zeros(self.l, device=xi.device)
+            vec[i] = 1
+            v = F.linear(xi, self.C1[i, :]) + F.linear(epsilon, self.D11[i, :]) + F.linear(w, self.D12[i, :])
+            epsilon = epsilon + vec * torch.tanh(v / self.Lambda[i])
+        
+        E_xi_ = F.linear(xi, self.F) + F.linear(epsilon, self.B1) + F.linear(w, self.B2)
+        xi_ = F.linear(E_xi_, torch.inverse(self.E))
+        u = F.linear(xi, self.C2) + F.linear(epsilon, self.D21) + F.linear(w, self.D22)
+
+        return u, xi_
 
 
-
+"""
 # REN WITH TRAINABLE GAMMA
 class RENR(nn.Module):
     def __init__(self, n, m, n_xi, l):
@@ -84,19 +172,19 @@ class RENR(nn.Module):
         # # # # # # # # # Training parameters # # # # # # # # #
         # Auxiliary matrices:
         std = 1
-        self.X = nn.Parameter((torch.randn(2 * n_xi + l, 2 * n_xi + l) * std))
-        self.Y = nn.Parameter((torch.randn(n_xi, n_xi) * std))  # Y1 nel paper
+        self.X = nn.Parameter((torch.randn(2 * n_xi + l, 2 * n_xi + l) * std)).to(device)
+        self.Y = nn.Parameter((torch.randn(n_xi, n_xi) * std)).to(device)  # Y1 nel paper
         # NN state dynamics:
-        self.B2 = nn.Parameter((torch.randn(n_xi, n) * std))
+        self.B2 = nn.Parameter((torch.randn(n_xi, n) * std)).to(device)
         # NN output:
-        self.C2 = nn.Parameter((torch.randn(m, n_xi) * std))
-        self.D21 = nn.Parameter((torch.randn(m, l) * std))
-        self.X3 = nn.Parameter(torch.randn(self.s, self.s) * std)
-        self.Y3 = nn.Parameter(torch.randn(self.s, self.s) * std)
-        self.sg = nn.Parameter(torch.randn(1, 1) * std)  # square root of gamma
+        self.C2 = nn.Parameter((torch.randn(m, n_xi) * std)).to(device)
+        self.D21 = nn.Parameter((torch.randn(m, l) * std)).to(device)
+        self.X3 = nn.Parameter(torch.randn(self.s, self.s) * std).to(device)
+        self.Y3 = nn.Parameter(torch.randn(self.s, self.s) * std).to(device)
+        self.sg = nn.Parameter(torch.randn(1, 1) * std).to(device)  # square root of gamma
 
         # v signal:
-        self.D12 = nn.Parameter((torch.randn(l, n) * std))
+        self.D12 = nn.Parameter((torch.randn(l, n) * std)).to(device)
         # bias:
         # self.bxi = nn.Parameter(torch.randn(n_xi))
         # self.bv = nn.Parameter(torch.randn(l))
@@ -104,15 +192,15 @@ class RENR(nn.Module):
         # # # # # # # # # Non-trainable parameters # # # # # # # # #
         # Auxiliary elements
         self.epsilon = 0.001
-        self.F = torch.zeros(n_xi, n_xi)
-        self.B1 = torch.zeros(n_xi, l)
-        self.E = torch.zeros(n_xi, n_xi)
-        self.Lambda = torch.ones(l)
-        self.C1 = torch.zeros(l, n_xi)
-        self.D11 = torch.zeros(l, l)
-        self.Lq = torch.zeros(m, m)
-        self.Lr = torch.zeros(n, n)
-        self.D22 = torch.zeros(m, n)
+        self.F = torch.zeros(n_xi, n_xi).to(device)
+        self.B1 = torch.zeros(n_xi, l).to(device)
+        self.E = torch.zeros(n_xi, n_xi).to(device)
+        self.Lambda = torch.ones(l).to(device)
+        self.C1 = torch.zeros(l, n_xi).to(device)
+        self.D11 = torch.zeros(l, l).to(device)
+        self.Lq = torch.zeros(m, m).to(device)
+        self.Lr = torch.zeros(n, n).to(device)
+        self.D22 = torch.zeros(m, n).to(device)
         self.set_model_param()
 
     def set_model_param(self):
@@ -155,9 +243,9 @@ class RENR(nn.Module):
         vec = torch.zeros(self.l)
         vec[0] = 1
         epsilon = torch.zeros(self.l)
-        v = F.linear(xi, self.C1[0, :]) + F.linear(w,
-                                                   self.D12[0, :])  # + self.bv[0]
-        epsilon = epsilon + vec * torch.tanh(v / self.Lambda[0])
+        v = F.linear(xi.to(device), self.C1[0, :].to(device)) + F.linear(w.to(device),
+                                                   self.D12[0, :].to(device))  # + self.bv[0]
+        epsilon = epsilon.to(device) + vec * torch.tanh(v / self.Lambda[0].to(device))
         for i in range(1, self.l):
             vec = torch.zeros(self.l)
             vec[i] = 1
