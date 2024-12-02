@@ -34,7 +34,7 @@ class REN(nn.Module):
     # ## Implementation of REN model, modified from "Recurrent Equilibrium Networks: Flexible Dynamic Models with
     # Guaranteed Stability and Robustness" by Max Revay et al.
     def __init__(self, m, p, n, l, bias=False, mode="l2stable", gamma=0.3, gammaTrain=False, Q=None, R=None, S=None,
-                 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')):
+                 device='cpu'):   #torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         super().__init__()
         self.m = m  # input dimension
         self.n = n  # state dimension
@@ -171,6 +171,7 @@ class REN(nn.Module):
         # We set Q to be negative definite. If Q is nsd we set: Q - \epsilon I.
         # I.e. The Q we define here is denoted as \matcal{Q} in REN paper.
         if mode == "l2stable":
+            print(torch.eye(self.p, device=self.device).device)
             Q = -(1. / gamma) * torch.eye(self.p, device=self.device)
             R = gamma * torch.eye(self.m, device=self.device)
             S = torch.zeros(self.m, self.p, device=self.device)
@@ -212,10 +213,10 @@ class REN(nn.Module):
 
 # Stable networked operator made by RENs with fully trainable l2 gains and interconnection matrices
 class NetworkedRENs(nn.Module):
-    #def __init__(self, N, Muy, Mud, Mey, m, p, n, l, top=True,
-    def __init__(self, N, Mud, m, p, n, l, top=True, ############################################
+    def __init__(self, N, Muy, Mud, Mey, m, p, n, l, top=True,
+    #def __init__(self, N, Mud, m, p, n, l, top=True, ############################################
   
-                 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')):
+                 device= 'cpu' ): #torch.device('cuda' if torch.cuda.is_available() else 'cpu')):
         super().__init__()
         self.device = device
         self.top = top  # If set to True, the topology of M is preserved, otherwise it trains a
@@ -224,19 +225,19 @@ class NetworkedRENs(nn.Module):
         self.m = m  # input dimension for each REN
         self.n = n  # state dimension for each REN
         self.l = l  # number of nonlinear layers for each REN
-        #self.Muy = Muy
+        self.Muy = Muy
         #########################################################################"
         # Define alpha and beta as trainable parameters
-        self.alpha = nn.Parameter(torch.tensor(0.6, requires_grad=True, dtype=torch.float32))
-        self.beta = nn.Parameter(torch.tensor(0.4, requires_grad=True, dtype=torch.float32))
+        #self.alpha = nn.Parameter(torch.tensor(0.6, requires_grad=True, dtype=torch.float32))
+        #self.beta = nn.Parameter(torch.tensor(0.4, requires_grad=True, dtype=torch.float32))
         
         # Update Muy using alpha and beta
-        Muy_base = torch.cat((torch.tensor([[0, self.alpha.item(), self.beta.item()], [1, 0, 0], [1, 0, 0]]), torch.zeros(3,3)), dim=0)
-        self.Muy = nn.Parameter(Muy_base.float())
+        #Muy_base = torch.cat((torch.tensor([[0, self.alpha.item(), self.beta.item()], [1, 0, 0], [1, 0, 0]]), torch.zeros(3,3)), dim=0)
+        #self.Muy = nn.Parameter(Muy_base.float())
         
-        self.Mey = torch.tensor([[0, self.alpha.item(), self.beta.item()], [1, 0, 0]])
+        #self.Mey = torch.tensor([[0, self.alpha.item(), self.beta.item()], [1, 0, 0]])
         self.Mud = Mud
-        #self.Mey = Mey
+        self.Mey = Mey
         #########################################################################
         self.diag_params = nn.Parameter(torch.randn(sum(p)))  # For trainable Mey matrix
         self.N = N
@@ -249,13 +250,13 @@ class NetworkedRENs(nn.Module):
         
         if top:
             # Create a mask where M is non-zero
-            self.mask = self.Muy.ge(0.1)         #########################added self.
+            self.mask = Muy.ge(0.1)         #########################added self.
             # Count the number of non-zero elements in M
             num_params = self.mask.sum().item()
             # Initialize the trainable parameters
             self.params = nn.Parameter(0.03 * torch.randn(num_params))
             # Create a clone of M to create Q (the trainable version of M)
-            self.Q = self.Muy.clone()     #########################added self.
+            self.Q = Muy.clone()     #########################added self.
         else:
             self.Q = nn.Parameter(0.01 * torch.randn((sum(m), sum(p))))
 
