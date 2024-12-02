@@ -171,7 +171,7 @@ class REN(nn.Module):
         # We set Q to be negative definite. If Q is nsd we set: Q - \epsilon I.
         # I.e. The Q we define here is denoted as \matcal{Q} in REN paper.
         if mode == "l2stable":
-            print(torch.eye(self.p, device=self.device).device)
+            
             Q = -(1. / gamma) * torch.eye(self.p, device=self.device)
             R = gamma * torch.eye(self.m, device=self.device)
             S = torch.zeros(self.m, self.p, device=self.device)
@@ -264,14 +264,13 @@ class NetworkedRENs(nn.Module):
         # checkLMI if set to True, checks if the dissipativity LMI is satisfied at every step
         Q = self.Q
         if self.top:
-            print(self.device)
+           
             params = self.params
             params = params.to(self.device)
-            print(params.device)
-            print(self.mask.device)
+            
             # Assign the parameters to the corresponding positions in Q
             masked_values = torch.zeros_like(Q, device=self.device)
-            print(masked_values.device)
+            
             self.mask = self.mask.to(self.device)   
             masked_values[self.mask] = params
             Q = masked_values
