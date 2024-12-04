@@ -90,7 +90,7 @@ class REN(nn.Module):
         self.D21 = torch.zeros(p, l, device=device)
         self.set_param(gamma)
 
-    def set_param(self, gamma=0.3):
+    def set_param(self, gamma=1):
         if self.gammaTrain:
             gamma = self.sg**2
         self.gamma = gamma
@@ -226,39 +226,35 @@ class NetworkedRENs(nn.Module):
         self.n = n  # state dimension for each REN
         self.l = l  # number of nonlinear layers for each REN
         self.Muy = Muy
-        #########################################################################"
-        # Define alpha and beta as trainable parameters
-        #self.alpha = nn.Parameter(torch.tensor(0.6, requires_grad=True, dtype=torch.float32))
-        #self.beta = nn.Parameter(torch.tensor(0.4, requires_grad=True, dtype=torch.float32))
-        
-        # Update Muy using alpha and beta
-        #Muy_base = torch.cat((torch.tensor([[0, self.alpha.item(), self.beta.item()], [1, 0, 0], [1, 0, 0]]), torch.zeros(3,3)), dim=0)
-        #self.Muy = nn.Parameter(Muy_base.float())
-        
-        #self.Mey = torch.tensor([[0, self.alpha.item(), self.beta.item()], [1, 0, 0]])
         self.Mud = Mud
         self.Mey = Mey
-        #########################################################################
         self.diag_params = nn.Parameter(torch.randn(sum(p)))  # For trainable Mey matrix
         self.N = N
-        self.r = nn.ModuleList([REN(self.m[j], self.p[j], self.n[j], self.l[j]) for j in range(N)])
+        ####################################################################
+        #self.r = nn.ModuleList([REN(self.m[j], self.p[j], self.n[j], self.l[j]) for j in range(N)])
+        checkpoint = [None] * N  # A list with N elements
+        checkpoint[0] = torch.load('checkpoint_users_epoch_200.pth')
+        checkpoint[1] = torch.load('checkpoint_absorber_epoch_200.pth')
+        checkpoint[2] = torch.load('checkpoint_chillers_epoch_200.pth')
+        mods = [REN(self.m[j], self.p[j], self.n[j], self.l[j]) for j in range(N)]
+        for j in range(N):
+            mods[j].load_state_dict(checkpoint[j]['model_state_dict'])
+        self.r = nn.ModuleList([mods[j] for j in range(N)])
+        #####################################################################
         self.s = nn.Parameter(torch.randn(N, device=device))
         self.gammaw = torch.nn.Parameter(4 * torch.randn(1, device=device))
         
-       # self.alpha = nn.Parameter(torch.randn(1, device=device))
-        #self.beta = nn.Parameter(torch.randn(1, device=device))
-        
         if top:
             # Create a mask where M is non-zero
-            self.mask = Muy.ge(0.1)         #########################added self.
+            self.mask = Muy.ge(0.1)        
             # Count the number of non-zero elements in M
             num_params = self.mask.sum().item()
             # Initialize the trainable parameters
-            self.params = nn.Parameter(0.03 * torch.randn(num_params))
+            self.params = nn.Parameter(0.03 * torch.ones(num_params))
             # Create a clone of M to create Q (the trainable version of M)
-            self.Q = Muy.clone()     #########################added self.
+            self.Q = Muy.clone() 
         else:
-            self.Q = nn.Parameter(0.01 * torch.randn((sum(m), sum(p))))
+            self.Q = nn.Parameter(0.01 * torch.ones((sum(m), sum(p))))
 
     def forward(self, t, d, x, checkLMI=False):
         # checkLMI if set to True, checks if the dissipativity LMI is satisfied at every step
