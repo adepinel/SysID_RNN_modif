@@ -31,8 +31,8 @@ class RNNModel(nn.Module):
 
 # addind c gain to the output since gamma is fixed to 1
 class gain(torch.nn.Module):
-    def init(self,gamma_bar):
-        super().init()
+    def __init__(self,gamma_bar=1):
+        super().__init__()
         self.gamma = torch.nn.Parameter(torch.ones(1)*gamma_bar)
     def forward(self, u):
         usys = self.gamma * u
