@@ -29,6 +29,15 @@ class RNNModel(nn.Module):
         out = out.squeeze()
         return out
 
+# addind c gain to the output since gamma is fixed to 1
+class gain(torch.nn.Module):
+    def init(self,gamma_bar):
+        super().init()
+        self.gamma = torch.nn.Parameter(torch.ones(1)*gamma_bar)
+    def forward(self, u):
+        usys = self.gamma * u
+        return usys
+
 # Robust REN implementation in the acyclic version
 class REN(nn.Module):
     # ## Implementation of REN model, modified from "Recurrent Equilibrium Networks: Flexible Dynamic Models with
@@ -66,8 +75,10 @@ class REN(nn.Module):
         self.C2 = nn.Parameter((torch.randn(p, n, device=device) * std))
 
         if bias:
-            self.bx = nn.Parameter(torch.randn(n, device=device) * std)
-            self.bv = nn.Parameter(torch.randn(l, device=device) * std)
+            self.bx = torch.zeros(n, device=device)
+            self.bv = torch.zeros(l, device=device)
+            #self.bx = nn.Parameter(torch.randn(n, device=device) * std)
+            #self.bv = nn.Parameter(torch.randn(l, device=device) * std)
             self.bu = nn.Parameter(torch.randn(p, device=device) * std)
         else:
             self.bx = torch.zeros(n, device=device)
@@ -231,15 +242,8 @@ class NetworkedRENs(nn.Module):
         self.diag_params = nn.Parameter(torch.randn(sum(p)))  # For trainable Mey matrix
         self.N = N
         ####################################################################
-        #self.r = nn.ModuleList([REN(self.m[j], self.p[j], self.n[j], self.l[j]) for j in range(N)])
-        checkpoint = [None] * N  # A list with N elements
-        checkpoint[0] = torch.load('checkpoint_users_epoch_200.pth')
-        checkpoint[1] = torch.load('checkpoint_absorber_epoch_200.pth')
-        checkpoint[2] = torch.load('checkpoint_chillers_epoch_200.pth')
-        mods = [REN(self.m[j], self.p[j], self.n[j], self.l[j]) for j in range(N)]
-        for j in range(N):
-            mods[j].load_state_dict(checkpoint[j]['model_state_dict'])
-        self.r = nn.ModuleList([mods[j] for j in range(N)])
+        self.r = nn.ModuleList([REN(self.m[j], self.p[j], self.n[j], self.l[j]) for j in range(N)])
+
         #####################################################################
         self.s = nn.Parameter(torch.randn(N, device=device))
         self.gammaw = torch.nn.Parameter(4 * torch.randn(1, device=device))
