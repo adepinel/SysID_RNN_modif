@@ -250,11 +250,11 @@ class NetworkedRENs(nn.Module):
         
         if top:
             # Create a mask where M is non-zero
-            self.mask = Muy.ge(0.1)        
+            self.mask = (Muy.ge(0.2) & Muy.le(0.99)) #Muy.ge(0.1)  
             # Count the number of non-zero elements in M
             num_params = self.mask.sum().item()
             # Initialize the trainable parameters
-            self.params = nn.Parameter(0.03 * torch.ones(num_params))
+            self.params = nn.Parameter(0.5 * torch.ones(num_params))
             # Create a clone of M to create Q (the trainable version of M)
             self.Q = Muy.clone() 
         else:
@@ -269,7 +269,7 @@ class NetworkedRENs(nn.Module):
             params = params.to(self.device)
             
             # Assign the parameters to the corresponding positions in Q
-            masked_values = torch.zeros_like(Q, device=self.device)
+            masked_values = Q #torch.zeros_like(Q, device=self.device)
             
             self.mask = self.mask.to(self.device)   
             masked_values[self.mask] = params
