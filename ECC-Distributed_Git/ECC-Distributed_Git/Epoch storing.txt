@@ -1,0 +1,384 @@
+Epoch: 1 	||	 Loss: 5.241850852966309
+L2 gain REN0:0.6
+L2 gain REN1:1.3
+L2 gain REN2:5.4
+Validation Loss of epoch 0: 2.537043809890747
+Epoch: 2 	||	 Loss: 2.290694236755371
+L2 gain REN0:0.7
+L2 gain REN1:1.3
+L2 gain REN2:4.8
+Validation Loss of epoch 1: 1.6044859886169434
+Epoch: 3 	||	 Loss: 1.6723196506500244
+L2 gain REN0:0.7
+L2 gain REN1:1.4
+L2 gain REN2:4.3
+Validation Loss of epoch 2: 1.2752258777618408
+Epoch: 4 	||	 Loss: 1.2957992553710938
+L2 gain REN0:0.7
+L2 gain REN1:1.4
+L2 gain REN2:4.0
+Validation Loss of epoch 3: 1.0020751953125
+Epoch: 5 	||	 Loss: 0.974506676197052
+L2 gain REN0:0.7
+L2 gain REN1:1.3
+L2 gain REN2:3.8
+Validation Loss of epoch 4: 0.9802796840667725
+Epoch: 6 	||	 Loss: 0.9767193794250488
+L2 gain REN0:0.7
+L2 gain REN1:1.3
+L2 gain REN2:3.6
+Validation Loss of epoch 5: 0.9744191765785217
+Epoch: 7 	||	 Loss: 0.973884642124176
+L2 gain REN0:0.7
+L2 gain REN1:1.3
+L2 gain REN2:3.5
+Validation Loss of epoch 6: 0.9667888283729553
+Epoch: 8 	||	 Loss: 0.9548896551132202
+L2 gain REN0:0.6
+L2 gain REN1:1.2
+L2 gain REN2:3.4
+Validation Loss of epoch 7: 0.8989855051040649
+Epoch: 9 	||	 Loss: 0.8826863765716553
+L2 gain REN0:0.6
+L2 gain REN1:1.1
+L2 gain REN2:3.3
+Validation Loss of epoch 8: 0.8054459095001221
+Epoch: 10 	||	 Loss: 0.788413405418396
+L2 gain REN0:0.6
+L2 gain REN1:1.0
+L2 gain REN2:3.2
+Validation Loss of epoch 9: 0.7257391214370728
+Epoch: 11 	||	 Loss: 0.7195976972579956
+L2 gain REN0:0.6
+L2 gain REN1:1.0
+L2 gain REN2:3.2
+Validation Loss of epoch 10: 0.643134355545044
+Epoch: 12 	||	 Loss: 0.6541898846626282
+L2 gain REN0:0.6
+L2 gain REN1:1.0
+L2 gain REN2:3.1
+Validation Loss of epoch 11: 0.5588443279266357
+Epoch: 13 	||	 Loss: 0.5832729339599609
+L2 gain REN0:0.6
+L2 gain REN1:0.9
+L2 gain REN2:3.0
+Validation Loss of epoch 12: 0.48344671726226807
+Epoch: 14 	||	 Loss: 0.5173032879829407
+L2 gain REN0:0.6
+L2 gain REN1:0.9
+L2 gain REN2:3.0
+Validation Loss of epoch 13: 0.4161710739135742
+Epoch: 15 	||	 Loss: 0.45398399233818054
+L2 gain REN0:0.6
+L2 gain REN1:0.9
+L2 gain REN2:2.9
+Validation Loss of epoch 14: 0.3828698992729187
+Epoch: 16 	||	 Loss: 0.43033626675605774
+L2 gain REN0:0.6
+L2 gain REN1:0.9
+L2 gain REN2:2.9
+Validation Loss of epoch 15: 0.33456844091415405
+Epoch: 17 	||	 Loss: 0.39646345376968384
+L2 gain REN0:0.6
+L2 gain REN1:0.8
+L2 gain REN2:2.9
+Validation Loss of epoch 16: 0.3115777373313904
+Epoch: 18 	||	 Loss: 0.3820035457611084
+L2 gain REN0:0.6
+L2 gain REN1:0.8
+L2 gain REN2:2.8
+Validation Loss of epoch 17: 0.3108704686164856
+Epoch: 19 	||	 Loss: 0.3852303624153137
+L2 gain REN0:0.5
+L2 gain REN1:0.8
+L2 gain REN2:2.8
+Validation Loss of epoch 18: 0.3073863983154297
+Epoch: 20 	||	 Loss: 0.38092970848083496
+L2 gain REN0:0.5
+L2 gain REN1:0.8
+L2 gain REN2:2.8
+Validation Loss of epoch 19: 0.29762887954711914
+Epoch: 21 	||	 Loss: 0.3657752275466919
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.7
+Validation Loss of epoch 20: 0.2862170934677124
+Epoch: 22 	||	 Loss: 0.3511190116405487
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.7
+Validation Loss of epoch 21: 0.2766726016998291
+Epoch: 23 	||	 Loss: 0.33774513006210327
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.7
+Validation Loss of epoch 22: 0.2628183662891388
+Epoch: 24 	||	 Loss: 0.32215410470962524
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 23: 0.2492145299911499
+Epoch: 25 	||	 Loss: 0.30522421002388
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 24: 0.23281876742839813
+Epoch: 26 	||	 Loss: 0.28729188442230225
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 25: 0.2203368842601776
+Epoch: 27 	||	 Loss: 0.2767447531223297
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 26: 0.21149581670761108
+Epoch: 28 	||	 Loss: 0.2708686888217926
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 27: 0.2035643309354782
+Epoch: 29 	||	 Loss: 0.26574620604515076
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 28: 0.19697695970535278
+Epoch: 30 	||	 Loss: 0.2597949504852295
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 29: 0.19089926779270172
+Epoch: 31 	||	 Loss: 0.2537313997745514
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 30: 0.1854998767375946
+Epoch: 32 	||	 Loss: 0.24776244163513184
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 31: 0.17875546216964722
+Epoch: 33 	||	 Loss: 0.2417602390050888
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 32: 0.1744401752948761
+Epoch: 34 	||	 Loss: 0.23736123740673065
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 33: 0.16727054119110107
+Epoch: 35 	||	 Loss: 0.23197031021118164
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 34: 0.16152147948741913
+Epoch: 36 	||	 Loss: 0.22724808752536774
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 35: 0.15608377754688263
+Epoch: 37 	||	 Loss: 0.2212841808795929
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.4
+Validation Loss of epoch 36: 0.14860329031944275
+Epoch: 38 	||	 Loss: 0.2147735357284546
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.4
+
+Epoch: 1 	||	 Loss: 0.21270139515399933
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 0: 0.4029523730278015
+Epoch: 2 	||	 Loss: 0.41897648572921753
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.7
+Validation Loss of epoch 1: 0.30738744139671326
+Epoch: 3 	||	 Loss: 0.3478759527206421
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 2: 0.18537086248397827
+Epoch: 4 	||	 Loss: 0.22433507442474365
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 3: 0.13710924983024597
+Epoch: 5 	||	 Loss: 0.16467979550361633
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 4: 0.12171479314565659
+Epoch: 6 	||	 Loss: 0.15336234867572784
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 5: 0.11221674829721451
+Epoch: 7 	||	 Loss: 0.14605781435966492
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 6: 0.10678151994943619
+Epoch: 8 	||	 Loss: 0.14204992353916168
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 7: 0.10516896098852158
+
+Epoch: 1 	||	 Loss: 0.1393927037715912
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 0: 0.18201349675655365
+Epoch: 2 	||	 Loss: 0.21640917658805847
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.7
+Validation Loss of epoch 1: 0.13209740817546844
+Epoch: 3 	||	 Loss: 0.15201424062252045
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.8
+Validation Loss of epoch 2: 0.1016562432050705
+Epoch: 4 	||	 Loss: 0.12750089168548584
+L2 gain REN0:0.5
+L2 gain REN1:0.7
+L2 gain REN2:2.8
+Validation Loss of epoch 3: 0.09019368886947632
+Epoch: 1 	||	 Loss: 0.05887836217880249
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 0: 0.9337215423583984
+Epoch: 2 	||	 Loss: 0.9308409094810486
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 1: 0.038214344531297684
+Epoch: 3 	||	 Loss: 0.05861131101846695
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 2: 0.22879678010940552
+Epoch: 4 	||	 Loss: 0.2647324204444885
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.6
+Validation Loss of epoch 3: 0.2633625864982605
+Epoch: 5 	||	 Loss: 0.30599868297576904
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 4: 0.1967952847480774
+Epoch: 6 	||	 Loss: 0.24135373532772064
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 5: 0.11891293525695801
+Epoch: 7 	||	 Loss: 0.16212491691112518
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 6: 0.07209455966949463
+Epoch: 8 	||	 Loss: 0.11172787845134735
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 7: 0.06456618010997772
+Epoch: 9 	||	 Loss: 0.0973648801445961
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 8: 0.07983830571174622
+Epoch: 10 	||	 Loss: 0.10804769396781921
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 9: 0.09839712083339691
+Epoch: 11 	||	 Loss: 0.12348845601081848
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.5
+Validation Loss of epoch 10: 0.10296683758497238
+Epoch: 12 	||	 Loss: 0.1319088637828827
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.4
+Validation Loss of epoch 11: 0.10324892401695251
+Epoch: 13 	||	 Loss: 0.1321207880973816
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.4
+Validation Loss of epoch 12: 0.09938459098339081
+Epoch: 14 	||	 Loss: 0.12706521153450012
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.4
+Validation Loss of epoch 13: 0.09205520153045654
+Epoch: 15 	||	 Loss: 0.12137068063020706
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.3
+Validation Loss of epoch 14: 0.08331392705440521
+Epoch: 16 	||	 Loss: 0.1152677834033966
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.3
+Validation Loss of epoch 15: 0.07941902428865433
+Epoch: 17 	||	 Loss: 0.1164313554763794
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.3
+Validation Loss of epoch 16: 0.08030080795288086
+Epoch: 18 	||	 Loss: 0.1173662319779396
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.2
+Validation Loss of epoch 17: 0.08299723267555237
+Epoch: 19 	||	 Loss: 0.11890504509210587
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.2
+Validation Loss of epoch 18: 0.07465601712465286
+Epoch: 20 	||	 Loss: 0.11302097141742706
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.2
+Validation Loss of epoch 19: 0.07169179618358612
+Epoch: 21 	||	 Loss: 0.10838229209184647
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.2
+Validation Loss of epoch 20: 0.07002702355384827
+Epoch: 22 	||	 Loss: 0.106843963265419
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.3
+Validation Loss of epoch 21: 0.0689140185713768
+Epoch: 23 	||	 Loss: 0.10554013401269913
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.3
+Validation Loss of epoch 22: 0.06635496020317078
+Epoch: 24 	||	 Loss: 0.10423368960618973
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.3
+Validation Loss of epoch 23: 0.06314420700073242
+Epoch: 25 	||	 Loss: 0.10299889743328094
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.3
+Validation Loss of epoch 24: 0.06070432811975479
+Epoch: 26 	||	 Loss: 0.10074043273925781
+L2 gain REN0:0.4
+L2 gain REN1:0.7
+L2 gain REN2:2.3
+Validation Loss of epoch 25: 0.05871115252375603
+#################################################
+#################################################
+#################################################

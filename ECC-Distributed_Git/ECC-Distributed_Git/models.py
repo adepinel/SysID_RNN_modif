@@ -269,7 +269,7 @@ class NetworkedRENs(nn.Module):
             params = params.to(self.device)
             
             # Assign the parameters to the corresponding positions in Q
-            masked_values = Q #torch.zeros_like(Q, device=self.device)
+            masked_values = Q.clone() #torch.zeros_like(Q, device=self.device)
             
             self.mask = self.mask.to(self.device)   
             masked_values[self.mask] = params
